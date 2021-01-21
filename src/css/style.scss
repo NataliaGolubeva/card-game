@@ -2,3 +2,24 @@
 @use "./base/reset";
 @use "./base/fonts";
 @use "./base/mixins" as *;
+
+.rectangle {
+  background-color: purple;
+  position: absolute;
+  transition: all 3ms;
+}
+button {
+  margin: 50px;
+  margin-top: 600px;
+  padding: 20px 50px;
+  background-color: green;
+  border: 1px solid green;
+  border-radius: 8px;
+  &:active {
+    outline: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  &:focus {
+    outline: none;
+  }
+}
