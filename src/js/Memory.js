@@ -7,30 +7,30 @@ export class Memory {
     this._username = username;
     this._first = null;
     this._second = null;
-    this._grid = this.init();
-
-    if (localStorage.getItem("xyz")) {
-      const persistedData = JSON.parse(localStorage.getItem("xyz"));
-      this._lvl = persistedData.lvl;
-      this._allIcons = persistedData.icons;
-
-      this.startLevel();
-      //...
-    } else {
-      this.fetchIcons();
-    }
-
+    this._grid = document.body.querySelector("#grid");
     this.setUpEvents();
+    this.fetchIcons();
+    this.startLevel();
+    // if (localStorage.getItem("xyz")) {
+    //  const persistedData = JSON.parse(localStorage.getItem("xyz"));
+    //  this._lvl = persistedData.lvl;
+    // this._allIcons = persistedData.icons;
+
+    // this.startLevel();
+    //...
+    //  } else {
+    //   this.fetchIcons();
+    // }
   }
-  saveToPersist() {
-    localStorage.setItem(
-      "xyz",
-      JSON.stringify({
-        lvl: this._level,
-        icons: this._allIcons,
-      })
-    );
-  }
+  // saveToPersist() {
+  //   localStorage.setItem(
+  //     "xyz",
+  //     JSON.stringify({
+  //       lvl: this._level,
+  //       icons: this._allIcons,
+  //     })
+  //   );
+  // }
 
   fetchIcons() {
     fetch("icons/selection.json")
@@ -42,14 +42,7 @@ export class Memory {
       })
       .catch((error) => console.log(error));
   }
-  init() {
-    document.body.insertAdjacentHTML(
-      "afterBegin",
 
-      `<div id="grid"></div>`
-    );
-    return document.querySelector("#grid");
-  }
   startLevel() {
     while (this.lvl < 10) {
       const totalDistinctCards = this._allIcons
