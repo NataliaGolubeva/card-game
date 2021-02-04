@@ -29,11 +29,8 @@ export default class Card {
       this._ref.classList.remove("flipped");
       this_isFlipped = false;
     } else {
-      //flip him
       this._ref.classList.add("flipped");
-      // event uitsturen
       this._isFlipped = true;
-      //send event that card has been flipped
       dispatchEvent(this._flippedEvent);
     }
   };

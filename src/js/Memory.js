@@ -7,18 +7,20 @@ export class Memory {
     this._username = username;
     this._first = null;
     this._second = null;
-    this._selected = ["leaf"];
-    this._turned = ["home"];
+    this._grid = this.init();
+
     if (localStorage.getItem("xyz")) {
       const persistedData = JSON.parse(localStorage.getItem("xyz"));
       this._lvl = persistedData.lvl;
       this._allIcons = persistedData.icons;
-      this.init();
+
+      this.startLevel();
       //...
     } else {
       this.fetchIcons();
     }
-    //setUpEvents => luisteren naar flipped eventTypes
+
+    this.setUpEvents();
   }
   saveToPersist() {
     localStorage.setItem(
@@ -29,8 +31,9 @@ export class Memory {
       })
     );
   }
+
   fetchIcons() {
-    fetch("./icons/selection.json")
+    fetch("icons/selection.json")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -40,25 +43,47 @@ export class Memory {
       .catch((error) => console.log(error));
   }
   init() {
-    //initiele html opbouwen (<div id="grid"></div>)
-    this.startLevel();
+    document.body.insertAdjacentHTML(
+      "afterBegin",
+
+      `<div id="grid"></div>`
+    );
+    return document.querySelector("#grid");
   }
   startLevel() {
-    // op basis van levelnr
-    //x aantal Card plaatsen in #grid
-    //op basis van levelNr aantal unieke items uit array halen
-    new Card(".grid", "pencil||home||gear||tree||leaf");
-    const result = ["leaf", "gear"];
-    const allCards = [...result, ...result];
-    //how to shuffle array
-    //allCards.shuffle()
-    //     1 => 2unieke => 4
-    // 2 => 4unieke => 8
-    // 3 => 8unieke => 16
+    while (this.lvl < 10) {
+      const totalDistinctCards = this._allIcons
+        .sort(() => 0.5 - Math.random())
+        .slice(0, this.lvl * 2);
+      const allCards = this.shuffle([
+        ...totalDistinctCards,
+        ...totalDistinctCards,
+      ]);
+      allCards.forEach((element) => {
+        new Card(this._grid, element);
+      });
+      this.lvl++;
+    }
   }
+  shuffle(cards) {
+    var currentIndex = cards.length,
+      temporaryValue,
+      randomIndex;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      temporaryValue = cards[currentIndex];
+      array[currentIndex] = cards[randomIndex];
+      cards[randomIndex] = temporaryValue;
+    }
+
+    return cards;
+  }
+
   setUpEvents() {
-    // window.addEventListener("flipped", function(e) {
-    //     console.log(e.detail._icon);
-    //   });
+    window.addEventListener("flipped", function (e) {
+      console.log(e.detail._icon);
+    });
   }
 }
