@@ -8,9 +8,10 @@ export class Memory {
     this._first = null;
     this._second = null;
     this._grid = document.body.querySelector("#grid");
-    this.setUpEvents();
     this.fetchIcons();
     this.startLevel();
+    this.setUpEvents();
+
     // if (localStorage.getItem("xyz")) {
     //  const persistedData = JSON.parse(localStorage.getItem("xyz"));
     //  this._lvl = persistedData.lvl;
@@ -38,27 +39,24 @@ export class Memory {
       .then((data) => {
         console.log(data);
         this._allIcons = data.icons.map((el) => el.properties.name);
-        this.init();
+        this.startLevel();
       })
       .catch((error) => console.log(error));
   }
 
   startLevel() {
-    while (this.lvl < 10) {
-      const totalDistinctCards = this._allIcons
-        .sort(() => 0.5 - Math.random())
-        .slice(0, this.lvl * 2);
-      const allCards = this.shuffle([
-        ...totalDistinctCards,
-        ...totalDistinctCards,
-      ]);
-      allCards.forEach((element) => {
-        new Card(this._grid, element);
-      });
-      this.lvl++;
-    }
+    const totalDistinctCards = this._allIcons
+      .sort(() => 0.5 - Math.random())
+      .slice(0, this.lvl * 2);
+    const allCards = this.shuffle([
+      ...totalDistinctCards,
+      ...totalDistinctCards,
+    ]);
+    allCards.forEach((element) => {
+      new Card(this._grid, element);
+    });
   }
-  shuffle(cards) {
+  shuffle = (cards) => {
     var currentIndex = cards.length,
       temporaryValue,
       randomIndex;
@@ -72,7 +70,7 @@ export class Memory {
     }
 
     return cards;
-  }
+  };
 
   setUpEvents() {
     window.addEventListener("flipped", function (e) {
